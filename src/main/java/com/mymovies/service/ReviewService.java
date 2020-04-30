@@ -23,6 +23,9 @@ public class ReviewService implements IReviewService {
 	
 	@Value("${resource.api.language}")
 	private String Language;
+	
+	@Value("${service.url}")
+	private String serviceUrl;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewService.class);
 	
@@ -32,10 +35,14 @@ public class ReviewService implements IReviewService {
 	public ReviewsDTO getAPI_Review(String movie_id) {
 
 		ReviewsDTO reviews = null;
+		
+		String url = serviceUrl == "" ? BASE_URL+movie_id+"/reviews"+API_KEY : serviceUrl+movie_id;
+		
+		LOGGER.info("@Get getAPI_Review Service URL : " + url);
 
 		try {
 
-			reviews = restTemplate.getForObject(BASE_URL+movie_id+"/reviews"+API_KEY, ReviewsDTO.class);
+			reviews = restTemplate.getForObject(url, ReviewsDTO.class);
 
 		} catch (Exception e) {
 			LOGGER.error("Unexpected Error From Service: getAPI_Review: " + e);
